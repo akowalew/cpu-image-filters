@@ -11,7 +11,8 @@
 # Global options
 ###############################################################################
 
-option(IMAGE_FILTERS_BUILD_TESTING "Whether to build tests or not" ON)
+option(IMAGE_FILTERS_BUILD_TESTING "Whether to build tests for image-filters library" ON)
+option(IMAGE_FILTERS_BUILD_BENCHMARKING "Whether to build benchmarks for image-filters library" ON)
 
 ###############################################################################
 # Library definition
@@ -59,5 +60,23 @@ if(BUILD_TESTING AND IMAGE_FILTERS_BUILD_TESTING)
 		    image-filters
 
             doctest::doctest
+    )
+endif()
+
+###############################################################################
+# Benchmarks
+###############################################################################
+
+if(BUILD_BENCHMARKING AND IMAGE_FILTERS_BUILD_BENCHMARKING)
+    add_executable(image-filters-bench
+    	bench/bench_main.cpp
+	    bench/filter_seq_bench.cpp
+    )
+
+    target_link_libraries(image-filters-bench
+	    PRIVATE
+		    image-filters
+
+		    picobench
     )
 endif()
