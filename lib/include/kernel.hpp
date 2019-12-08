@@ -1,0 +1,14 @@
+///////////////////////////////////////////////////////////////////////////////
+// kernel.hpp
+//
+// Contains declarations of helper functions for filters kernels
+//
+// Author: akowalew (ram.techen@gmail.com)
+// Date: 8.12.2019 18:02 CEST
+///////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include "image.hpp"
+
+void low_pass_kernel(Image32F& dst);
