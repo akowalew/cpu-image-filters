@@ -18,4 +18,4 @@
  * @param path path to the file
  * @return read image
  */
-Image read_image(const char* path);
+ImageU8 read_image(const char* path);

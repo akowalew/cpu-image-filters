@@ -18,4 +18,4 @@
  * @param path path of output file
  * @param image image to be written
  */
-void write_image(const char* path, Image image);
+void write_image(const char* path, ImageU8 image);

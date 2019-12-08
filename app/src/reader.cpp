@@ -13,10 +13,9 @@
 
 #include <cassert>
 
-Image read_image(const char* path)
+ImageU8 read_image(const char* path)
 {
-    auto image = cv::imread(path, cv::IMREAD_COLOR);
-    assert(image.type() == CV_8UC3);
-    assert(image.channels() == 3);
+    auto image = cv::imread(path, cv::IMREAD_GRAYSCALE);
+    assert(image.type() == CV_8UC1);
     return image;
 }

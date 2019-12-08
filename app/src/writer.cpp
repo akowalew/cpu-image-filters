@@ -13,7 +13,7 @@
 
 #include <cassert>
 
-void write_image(const char* path, Image image)
+void write_image(const char* path, ImageU8 image)
 {
 	const auto written = cv::imwrite(path, image);
 	if(!written)
