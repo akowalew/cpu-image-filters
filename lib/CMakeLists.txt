@@ -22,6 +22,7 @@ add_library(image-filters
 	src/filter.cpp
 	src/filter_omp.cpp
 	src/filter_seq.cpp
+	src/kernel.cpp
 )
 
 target_link_libraries(image-filters

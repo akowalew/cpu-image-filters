@@ -8,3 +8,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "filter.hpp"
+
+void filter2d_8(const Image& src, Image& dst, const Image& kernel)
+{
+
+}
