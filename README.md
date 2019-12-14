@@ -16,14 +16,14 @@ Basically there is only one function in the whole project: `filter2d_8_seq`, whi
 In order to build the project, you need following things:
 
 - C++17 capable compiler (tested on GCC 7.4.0 on Linux, not tested yet on Windows)
-- CMake - minimum required 3.10.2
-- Conan package manager - if you wouldn't like to install libraries in your system
-- OpenCV - Just for reading/writing images, at the moment must be provided globally by the system
-- doctest - Unit-testing library, if needed to do unit-tests. Provided either via Conan or globally by the system
+- [CMake](https://cmake.org/download/) - minimum required 3.10.2
+- [Conan package manager](https://conan.io/) - if you wouldn't like to install libraries in your system
+- [OpenCV](https://opencv.org/) - Just for reading/writing images, at the moment must be provided globally by the system
+- [doctest](https://github.com/onqtam/doctest) - Unit-testing library, if needed to do unit-tests. Provided either via Conan or globally by the system
 
 There are also needed benchmarking libraries. They will be downloaded using Git submodules:
 
-- picobench
+- [picobench](https://github.com/iboB/picobench) - microbenchmarking library
 
 ## Building
 
