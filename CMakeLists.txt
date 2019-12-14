@@ -14,8 +14,10 @@ project(cpu-image-filters VERSION 0.1.0 LANGUAGES CXX)
 # Global options
 ###############################################################################
 
+
 option(BUILD_TESTING "Whether to build tests or not" ON)
 option(BUILD_BENCHMARKING "Whether to build benchmarks or not" ON)
+option(BUILD_WITH_CONAN "Whether to use Conan package manager or not" OFF)
 
 option(BUILD_EXTERN_LIBS "Whether to build extern libraries" ON)
 option(BUILD_IMAGE_FILTERS_LIB "Whether to build image-filters library or not" ON)
@@ -25,8 +27,7 @@ option(BUILD_FILTER_IMAGE_APP "Whether to build filter-image application or not"
 # Conan package manager integration
 ###############################################################################
 
-# At the moment, conan is used only when testing
-if(BUILD_TESTING)
+if(BUILD_WITH_CONAN)
     # Include output of conan installation
     find_file(CONANBUILDINFO_FILE conanbuildinfo.cmake HINTS ${CMAKE_BINARY_DIR})
     include(${CONANBUILDINFO_FILE})
@@ -41,6 +42,11 @@ if(BUILD_TESTING)
     # Enable CMake testing suite
 	enable_testing()
 endif()
+
+# Override default CMake output directories
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 ###############################################################################
 # External packages
