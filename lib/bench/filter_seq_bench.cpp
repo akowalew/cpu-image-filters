@@ -13,6 +13,7 @@
 
 #include "kernel.hpp"
 
+//! Performs benchmarking of filter2d_8_seq function
 #define FILTER_2D_8_SEQ_BENCH(Width, Height, KSize) \
 static void filter2d_8_seq_ ## Width ## _ ## Height ## _ ## KSize ## _(picobench::state& s) \
 { \
@@ -34,7 +35,3 @@ FILTER_2D_8_SEQ_BENCH(1024, 768, 3)
 FILTER_2D_8_SEQ_BENCH(320, 240, 11)
 FILTER_2D_8_SEQ_BENCH(640, 480, 11)
 FILTER_2D_8_SEQ_BENCH(1024, 768, 11)
-
-FILTER_2D_8_SEQ_BENCH(320, 240, 55)
-FILTER_2D_8_SEQ_BENCH(640, 480, 55)
-FILTER_2D_8_SEQ_BENCH(1024, 768, 55)

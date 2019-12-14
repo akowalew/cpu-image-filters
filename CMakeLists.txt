@@ -22,21 +22,25 @@ option(BUILD_IMAGE_FILTERS_LIB "Whether to build image-filters library or not" O
 option(BUILD_FILTER_IMAGE_APP "Whether to build filter-image application or not" ON)
 
 ###############################################################################
+# Conan package manager integration
+###############################################################################
+
+# At the moment, conan is used only when testing
+if(BUILD_TESTING)
+    # Include output of conan installation
+    find_file(CONANBUILDINFO_FILE conanbuildinfo.cmake HINTS ${CMAKE_BINARY_DIR})
+    include(${CONANBUILDINFO_FILE})
+    conan_basic_setup()
+endif()
+
+###############################################################################
 # Project global options
 ###############################################################################
 
 if(BUILD_TESTING)
+    # Enable CMake testing suite
 	enable_testing()
 endif()
-
-###############################################################################
-# Conan integration
-###############################################################################
-
-# Include output of conan installation
-find_file(CONANBUILDINFO_FILE conanbuildinfo.cmake HINTS ${CMAKE_BINARY_DIR})
-include(${CONANBUILDINFO_FILE})
-conan_basic_setup()
 
 ###############################################################################
 # External packages

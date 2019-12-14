@@ -7,4 +7,7 @@
 # Date: 8.12.2019 21:10 CEST
 ###############################################################################
 
-add_subdirectory(picobench)
+# Include benchmarking libraries only when needed
+if(BUILD_BENCHMARKING)
+	add_subdirectory(picobench)
+endif()
