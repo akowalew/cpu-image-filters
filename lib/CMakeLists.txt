@@ -38,7 +38,7 @@ target_include_directories(image-filters
 
 target_compile_options(image-filters
 	PRIVATE
-		-Wall -Wextra -pedantic
+		-Wall -Wextra -pedantic -fopenmp
 )
 
 set_target_properties(image-filters
@@ -71,6 +71,7 @@ if(BUILD_BENCHMARKING AND IMAGE_FILTERS_BUILD_BENCHMARKING)
     add_executable(image-filters-bench
     	bench/bench_main.cpp
 	    bench/filter_seq_bench.cpp
+		bench/filter_omp_bench.cpp
     )
 
     target_link_libraries(image-filters-bench

@@ -75,7 +75,7 @@ In order to filter image with given kernel size, just type:
 
 ```sh
 # Filter simple image with kernel size 3x3 and save result to the file
-./bin/filter-image ../assets/sunflower.jpg sunflower_out.jpg 3
+./bin/filter-image <seq/omp> ../assets/sunflower.jpg sunflower_out.jpg 3
 ```
 
 ## Benchmark filtering algorithm
