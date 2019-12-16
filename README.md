@@ -81,3 +81,4 @@ In order to benchmark filtering algorithm with given number of repeats, just typ
 ## Authors:
 
 - [akowalew](https://github.com/akowalew)
+- [marcin-jamroz](https://github.com/marcin-jamroz)
