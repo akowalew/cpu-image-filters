@@ -93,11 +93,11 @@ Now, to perform benchmarking, just type:
 ./bin/image-filters-bench
 ```
 
-Benchmarks are implemented using Google Benchmark, so you can use its CLI directly (setting number of iterations, filtering tests etc). As example to get command help:
+Benchmarks are implemented using Google Benchmark, so you can use its CLI directly (setting number of iterations, filtering tests etc). As example to run tests with 25 repeatitions and display only summary:
 
 ```sh
-# Get help about benchmarking
-./bin/image-filters-bench --help
+# Run benchmark with 25 repetitions and display summary only
+./bin/image-filters-bench --benchmark_repetitions=25 --benchmark_report_aggregates_only=true
 ```
 
 After finished benchmarking, back to powersave governor:
