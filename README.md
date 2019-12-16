@@ -27,15 +27,7 @@ There are also needed benchmarking libraries. They will be downloaded using Git 
 
 ## Building
 
-First, download Git submodules:
-
-```sh
-# Download Git submodules
-git submodule init
-git submodule update
-```
-
-Then, you have to create build directory (for out-of-source building):
+First, you have to create build directory (for out-of-source building):
 
 ```sh
 # Create out-of-source build directory
@@ -47,8 +39,10 @@ If you would like to use Conan, install through it needed dependencies:
 
 ```sh
 # Install conan dependencies
-conan install ../
+conan install ../ --build=missing
 ```
+
+_NOTE: If you encounter later some undefined references errors, modify your `default` Conan profile to use `libstdc++11` ABI_
 
 Configure CMake:
 
@@ -83,8 +77,8 @@ In order to filter image with given kernel size, just type:
 In order to benchmark filtering algorithm with given number of repeats, just type:
 
 ```sh
-# Benchmark algorithms, each case repeat 100 times
-./bin/image-filters-bench --iters=100
+# Benchmark algorithms
+./bin/image-filters-bench
 ```
 
 ## Authors:
