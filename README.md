@@ -71,11 +71,36 @@ In order to filter image with given kernel size, just type:
 
 ## Benchmark filtering algorithm
 
-In order to benchmark filtering algorithm with given number of repeats, just type:
+Before you do any benchmark, make sure that you've build project in at least `Release` version:
+
+```sh
+cmake ../ -DCMAKE_BUILD_TYPE=Release
+```
+
+Ensure also, that CPU frequency scalling is disabled:
+
+```sh
+sudo cpupower frequency-set --governor performance
+```
+
+Now, to perform benchmarking, just type:
 
 ```sh
 # Benchmark algorithms
 ./bin/image-filters-bench
+```
+
+Benchmarks are implemented using Google Benchmark, so you can use its CLI directly (setting number of iterations, filtering tests etc). As example to get command help:
+
+```sh
+# Get help about benchmarking
+./bin/image-filters-bench --help
+```
+
+After finished benchmarking, back to powersave governor:
+
+```sh
+sudo cpupower frequency-set --governor powersave
 ```
 
 ## Authors:
