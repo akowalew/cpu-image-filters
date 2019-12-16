@@ -37,7 +37,8 @@ target_include_directories(filter-image
 
 target_compile_options(filter-image
 	PRIVATE
-		-Wall -Wextra -pedantic -fopenmp
+		# Enable all possible warnings
+		-Wall -Wextra -pedantic
 )
 
 set_target_properties(filter-image

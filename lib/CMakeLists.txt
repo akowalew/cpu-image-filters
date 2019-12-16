@@ -28,7 +28,12 @@ add_library(image-filters
 
 target_link_libraries(image-filters
 	PUBLIC
+		# Link to OpenCV both in implementation and interface
 		${OpenCV_LIBRARIES}
+
+	PRIVATE
+		# Link to OpenMP only in implementation
+		OpenMP::OpenMP_CXX
 )
 
 target_include_directories(image-filters
@@ -38,12 +43,15 @@ target_include_directories(image-filters
 
 target_compile_options(image-filters
 	PRIVATE
-		-Wall -Wextra -pedantic -fopenmp
+		# Enable all warnings only in implementation
+		-Wall -Wextra -pedantic
 )
 
 set_target_properties(image-filters
 	PROPERTIES
+		# Enable C++17 standard without compiler-specific extensions
 		CXX_STANDARD 17
+		CXX_EXTENSIONS OFF
 )
 
 ###############################################################################

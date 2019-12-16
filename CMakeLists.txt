@@ -47,12 +47,12 @@ endif()
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
 
 ###############################################################################
 # External packages
 ###############################################################################
 
+# We need OpenCV only for image writing/reading
 find_package(OpenCV REQUIRED
     COMPONENTS
     	opencv_core
@@ -61,6 +61,9 @@ find_package(OpenCV REQUIRED
     	opencv_highgui
     	opencv_imgcodecs
 )
+
+# We need OpenMP extensions for multithreaded algorithms
+find_package(OpenMP REQUIRED)
 
 if(BUILD_TESTING)
 	# We need this framework only when testing
