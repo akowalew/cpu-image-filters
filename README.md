@@ -32,10 +32,13 @@ mkdir -p build
 cd build
 ```
 
-If you would like to use Conan, install through it needed dependencies:
+If you would like to use Conan, define first needed remotes (in project root dir), and then install needed dependencies:
 
 ```sh
-# Install conan dependencies
+# Install Conan configuration based on `conan` subdirectory
+conan config install ../conan/
+
+# Install Conan dependencies
 conan install ../ --build=missing
 ```
 

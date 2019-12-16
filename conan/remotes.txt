@@ -1,0 +1,1 @@
+conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz True
