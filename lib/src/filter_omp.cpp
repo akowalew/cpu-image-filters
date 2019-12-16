@@ -58,9 +58,7 @@ Dst clamp_to(Src src)
 void filter2d_8_omp(const Image& src, Image& dst, const Image& kernel)
 {
     omp_set_nested(1);
-    // omp_set_num_threads(2);
-    // int max_threads = omp_get_max_threads();
-    // std::cout << "Max num of threads: " << max_threads << std::endl;
+    omp_set_num_threads(3);
 
     // Filtering cannot be done in-place
 	assert(src.data != dst.data);
@@ -108,18 +106,40 @@ void filter2d_8_omp(const Image& src, Image& dst, const Image& kernel)
 	auto dst_it_i = (dst.data + dst_offset);
 	auto src_it_i = src.data;
 
+	auto dst_size = width * height;
+
 	// For each row do...
-	#pragma omp for
-	for(auto i = 0; i < height; ++i)
+	#pragma omp parallel firstprivate(dst_it_i, src_it_i)
 	{
-		
+		int chunk, last_chunk;
+		#pragma omp single copyprivate(chunk, last_chunk)
+		{
+			chunk = dst_size / omp_get_num_threads();
+			int remainder = dst_size % omp_get_num_threads();
+			last_chunk = chunk + remainder;
+			std::cout << chunk << "; " << last_chunk << "; " << dst_size << std::endl;
+		}
+
         auto src_it_j = src_it_i;
 		auto dst_it_j = dst_it_i;
+		auto last = src_it_i;
+
+
+		if(omp_get_thread_num() == omp_get_num_threads() - 1){
+			src_it_j += (omp_get_thread_num() * last_chunk);
+			dst_it_j += (omp_get_thread_num() * last_chunk);
+			last = dst_it_j + last_chunk;
+		} else {
+			src_it_j += (omp_get_thread_num() * chunk);
+			dst_it_j += (omp_get_thread_num() * chunk);
+			last = dst_it_j + chunk;
+		}
 
 
 		// For each column do...
-		for(auto j = 0; j < width; ++j)
+		for( auto i =  dst_it_j; i < last; i++)
 		{
+		
 			// Initialize accumulator to zero
 			auto acc = Accumulator{0};
 
@@ -162,9 +182,5 @@ void filter2d_8_omp(const Image& src, Image& dst, const Image& kernel)
 			++src_it_j;
 			++dst_it_j;
 		}
-
-		// Jump to next rows in source and destination
-		src_it_i += cols;
-		dst_it_i += cols;
 	}
 }
