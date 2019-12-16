@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // filter.cpp
 //
-// Contains definitions of image filtering functions - OpenMP version
+// Contains definitions of image filtering functions - Sequential version
 //
 // Author: akowalew (ram.techen@gmail.com)
 // Date: 8.12.2019 13:13 CEST
@@ -9,11 +9,12 @@
 
 #include "filter.hpp"
 
-#include <limits>
 #include <cstdio>
 #include <cassert>
+
+#include <limits>
+
 #include <omp.h>
- #include <iostream>
 
 /**
  * @brief Helper function for clamping values between two incompatible types
@@ -57,12 +58,7 @@ Dst clamp_to(Src src)
 
 void filter2d_8_omp(const ImageU8& src, ImageU8& dst, const Image32F& kernel)
 {
-    omp_set_nested(1);
-    // omp_set_num_threads(8);
-    // int max_threads = omp_get_max_threads();
-    // std::cout << "Max num of threads: " << max_threads << std::endl;
-
-    // Filtering cannot be done in-place
+	// Filtering cannot be done in-place
 	assert(src.data != dst.data);
 
 	// Images must be continuous so we can operate on memory directly
@@ -104,16 +100,12 @@ void filter2d_8_omp(const ImageU8& src, ImageU8& dst, const Image32F& kernel)
 	// Since width and height is reduced, we have to start from different place
 	const auto dst_offset = ((half_kernel_size * cols) + half_kernel_size);
 
-	// Start convolution filtering
-	auto dst_it_i = (dst.data + dst_offset);
-	auto src_it_i = src.data;
-
 	// For each row do...
+	#pragma omp parallel for
 	for(auto i = 0; i < height; ++i)
 	{
-		
-        auto src_it_j = src_it_i;
-		auto dst_it_j = dst_it_i;
+		auto src_it_j = (src.data + i * cols);
+		auto dst_it_j = (dst.data + dst_offset + i * cols);
 
 		// For each column do...
 		for(auto j = 0; j < width; ++j)
@@ -123,18 +115,15 @@ void filter2d_8_omp(const ImageU8& src, ImageU8& dst, const Image32F& kernel)
 
 			auto src_it_m = src_it_j;
 			auto kernel_it = reinterpret_cast<float*>(kernel.data);
-			auto src_it_n = src_it_m;
-			
+
 			// For each kernel row do...
-			#pragma omp for collapse(2) schedule(static, 9) nowait
 			for(auto m = 0; m < kernel_size; ++m)
 			{
+				auto src_it_n = src_it_m;
+
 				// For each kernel column do...
 				for(auto n = 0; n < kernel_size; ++n)
 				{
-					if(n == 0) {
-						src_it_n = src_it_m;
-					}
 					// Fetch source and kernel values
 					const auto src_value = *(src_it_n);
 					const auto kernel_value = *(kernel_it);
@@ -145,14 +134,12 @@ void filter2d_8_omp(const ImageU8& src, ImageU8& dst, const Image32F& kernel)
 					// Jump to next columns in source and kernel
 					++src_it_n;
 					++kernel_it;
-
-					if(n == kernel_size - 1) {
-						// Jump to next row in source (only)
-						src_it_m += cols;
-
-						// Altough we don't do this in kernel, because it is continuous
-					}
 				}
+
+				// Jump to next row in source (only)
+				src_it_m += cols;
+
+				// Altough we don't do this in kernel, because it is continuous
 			}
 
 			// Clamp accumulator value to fit in destination type
@@ -165,9 +152,5 @@ void filter2d_8_omp(const ImageU8& src, ImageU8& dst, const Image32F& kernel)
 			++src_it_j;
 			++dst_it_j;
 		}
-
-		// Jump to next rows in source and destination
-		src_it_i += cols;
-		dst_it_i += cols;
 	}
 }

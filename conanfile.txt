@@ -9,6 +9,7 @@
 
 [requires]
 	doctest/2.3.4@bincrafters/stable
+	google-benchmark/1.4.1@mpusz/stable
 
 [generators]
 	cmake

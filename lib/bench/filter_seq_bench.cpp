@@ -7,33 +7,26 @@
 // Date: 8.12.2019 20:14 CEST
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "picobench/picobench.hpp"
+#include <benchmark/benchmark.h>
 
 #include "filter_seq.hpp"
 
 #include "kernel.hpp"
 
 //! Performs benchmarking of filter2d_8_seq function
-#define FILTER_2D_8_SEQ_BENCH(Width, Height, KSize) \
-static void filter2d_8_seq_ ## Width ## _ ## Height ## _ ## KSize ## _(picobench::state& s) \
-{ \
-    auto src = ImageU8(Width, Height); \
-    auto dst = ImageU8(src.rows, src.cols); \
-    auto kernel = Image32F(KSize, KSize, CV_32F); \
-\
-    for (auto _ : s) \
-    { \
-        filter2d_8_seq(src, dst, kernel); \
-    } \
-} \
-PICOBENCH(filter2d_8_seq_ ## Width ## _ ## Height ## _ ## KSize ## _); \
+static void filter2d_8_seq(benchmark::State& state, int width, int height, int ksize)
+{
+    auto src = ImageU8(width, height);
+    auto dst = ImageU8(src.rows, src.cols);
+    auto kernel = Image32F(ksize, ksize, CV_32F);
 
-FILTER_2D_8_SEQ_BENCH(320, 240, 3)
-FILTER_2D_8_SEQ_BENCH(640, 480, 3)
-FILTER_2D_8_SEQ_BENCH(1024, 768, 3)
-FILTER_2D_8_SEQ_BENCH(1920, 1080, 3)
+    for (auto _ : state)
+    {
+        filter2d_8_seq(src, dst, kernel);
+    }
+}
 
-FILTER_2D_8_SEQ_BENCH(320, 240, 21)
-FILTER_2D_8_SEQ_BENCH(640, 480, 21)
-FILTER_2D_8_SEQ_BENCH(1024, 768, 21)
-FILTER_2D_8_SEQ_BENCH(1920, 1080, 21)
+// BENCHMARK_CAPTURE(filter2d_8_seq, 320x240x3, 320, 240, 3);
+// BENCHMARK_CAPTURE(filter2d_8_seq, 320x240x9, 320, 240, 9);
+// BENCHMARK_CAPTURE(filter2d_8_seq, 640x480x3, 640, 480, 3);
+BENCHMARK_CAPTURE(filter2d_8_seq, 640x480x9, 640, 480, 9);

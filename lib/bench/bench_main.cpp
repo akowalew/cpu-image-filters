@@ -7,5 +7,7 @@
 // Date: 8.12.2019 20:13 CEST
 ///////////////////////////////////////////////////////////////////////////////
 
-#define PICOBENCH_IMPLEMENT_WITH_MAIN
-#include "picobench/picobench.hpp"
+#include <benchmark/benchmark.h>
+
+// Inherit main benchmark routine from library
+BENCHMARK_MAIN();

@@ -1,33 +1,32 @@
-#include "picobench/picobench.hpp"
+///////////////////////////////////////////////////////////////////////////////
+// filter_omp_bench.cpp
+//
+// Contains definitions of benchmarks for filter_omp module
+//
+// Author: akowalew (ram.techen@gmail.com)
+// Date: 16.12.2019 22:04 CEST
+///////////////////////////////////////////////////////////////////////////////
+
+#include <benchmark/benchmark.h>
 
 #include "filter_omp.hpp"
 
 #include "kernel.hpp"
-#include <stdlib.h>
 
 //! Performs benchmarking of filter2d_8_omp function
-#define FILTER_2D_8_OMP_BENCH(Width, Height, KSize) \
-static void filter2d_8_omp_ ## Width ## _ ## Height ## _ ## KSize ## _(picobench::state& s) \
-{ \
-    auto src = ImageU8(Width, Height); \
-    auto dst = ImageU8(src.rows, src.cols); \
-    auto kernel = Image32F(KSize, KSize, CV_32F); \
-    setenv("OMP_NUM_THREADS", "2", 1); \
-\
-    for (auto _ : s) \
-    { \
-        filter2d_8_omp(src, dst, kernel); \
-    } \
-} \
-PICOBENCH(filter2d_8_omp_ ## Width ## _ ## Height ## _ ## KSize ## _); \
+static void filter2d_8_omp(benchmark::State& state, int width, int height, int ksize)
+{
+    auto src = ImageU8(width, height);
+    auto dst = ImageU8(src.rows, src.cols);
+    auto kernel = Image32F(ksize, ksize, CV_32F);
 
+    for (auto _ : state)
+    {
+        filter2d_8_omp(src, dst, kernel);
+    }
+}
 
-FILTER_2D_8_OMP_BENCH(320, 240, 3)
-FILTER_2D_8_OMP_BENCH(640, 480, 3)
-FILTER_2D_8_OMP_BENCH(1024, 768, 3)
-FILTER_2D_8_OMP_BENCH(1920, 1080, 3)
-
-FILTER_2D_8_OMP_BENCH(320, 240, 21)
-FILTER_2D_8_OMP_BENCH(640, 480, 21)
-FILTER_2D_8_OMP_BENCH(1024, 768, 21)
-FILTER_2D_8_OMP_BENCH(1920, 1080, 21)
+// BENCHMARK_CAPTURE(filter2d_8_omp, 320x240x3, 320, 240, 3);
+// BENCHMARK_CAPTURE(filter2d_8_omp, 320x240x9, 320, 240, 9);
+// BENCHMARK_CAPTURE(filter2d_8_omp, 640x480x3, 640, 480, 3);
+BENCHMARK_CAPTURE(filter2d_8_omp, 640x480x9, 640, 480, 9);

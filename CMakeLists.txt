@@ -62,6 +62,8 @@ find_package(OpenCV REQUIRED
     	opencv_imgcodecs
 )
 
+find_package(benchmark REQUIRED)
+
 # We need OpenMP extensions for multithreaded algorithms
 find_package(OpenMP REQUIRED)
 

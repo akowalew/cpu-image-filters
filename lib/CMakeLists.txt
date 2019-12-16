@@ -78,14 +78,15 @@ endif()
 if(BUILD_BENCHMARKING AND IMAGE_FILTERS_BUILD_BENCHMARKING)
     add_executable(image-filters-bench
     	bench/bench_main.cpp
+	    bench/filter_omp_bench.cpp
 	    bench/filter_seq_bench.cpp
-		bench/filter_omp_bench.cpp
     )
 
     target_link_libraries(image-filters-bench
 	    PRIVATE
 		    image-filters
 
-		    picobench
+		    ${benchmark_LIBRARIES}
+		    benchmark
     )
 endif()
