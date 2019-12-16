@@ -19,4 +19,4 @@
  * @param dst destination image
  * @param kernel kernel of the filter (squared)
  */
-void filter2d_8_omp(const Image& src, Image& dst, const Image& kernel);
+void filter2d_8_omp(const ImageU8& src, ImageU8& dst, const Image32F& kernel);

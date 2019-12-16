@@ -55,10 +55,10 @@ Dst clamp_to(Src src)
 	}
 }
 
-void filter2d_8_omp(const Image& src, Image& dst, const Image& kernel)
+void filter2d_8_omp(const ImageU8& src, ImageU8& dst, const Image32F& kernel)
 {
     omp_set_nested(1);
-    // omp_set_num_threads(2);
+    // omp_set_num_threads(8);
     // int max_threads = omp_get_max_threads();
     // std::cout << "Max num of threads: " << max_threads << std::endl;
 
@@ -109,13 +109,11 @@ void filter2d_8_omp(const Image& src, Image& dst, const Image& kernel)
 	auto src_it_i = src.data;
 
 	// For each row do...
-	#pragma omp for
 	for(auto i = 0; i < height; ++i)
 	{
 		
         auto src_it_j = src_it_i;
 		auto dst_it_j = dst_it_i;
-
 
 		// For each column do...
 		for(auto j = 0; j < width; ++j)
@@ -125,15 +123,18 @@ void filter2d_8_omp(const Image& src, Image& dst, const Image& kernel)
 
 			auto src_it_m = src_it_j;
 			auto kernel_it = reinterpret_cast<float*>(kernel.data);
-
+			auto src_it_n = src_it_m;
+			
 			// For each kernel row do...
+			#pragma omp for collapse(2) schedule(static, 9) nowait
 			for(auto m = 0; m < kernel_size; ++m)
 			{
-				auto src_it_n = src_it_m;
-
 				// For each kernel column do...
 				for(auto n = 0; n < kernel_size; ++n)
 				{
+					if(n == 0) {
+						src_it_n = src_it_m;
+					}
 					// Fetch source and kernel values
 					const auto src_value = *(src_it_n);
 					const auto kernel_value = *(kernel_it);
@@ -144,12 +145,14 @@ void filter2d_8_omp(const Image& src, Image& dst, const Image& kernel)
 					// Jump to next columns in source and kernel
 					++src_it_n;
 					++kernel_it;
+
+					if(n == kernel_size - 1) {
+						// Jump to next row in source (only)
+						src_it_m += cols;
+
+						// Altough we don't do this in kernel, because it is continuous
+					}
 				}
-
-				// Jump to next row in source (only)
-				src_it_m += cols;
-
-				// Altough we don't do this in kernel, because it is continuous
 			}
 
 			// Clamp accumulator value to fit in destination type
