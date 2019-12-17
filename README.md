@@ -32,17 +32,17 @@ mkdir -p build
 cd build
 ```
 
-If you would like to use Conan, define first needed remotes (in project root dir), and then install needed dependencies:
+If you would like to use Conan, define first needed remotes, and then install needed dependencies:
 
 ```sh
 # Install Conan configuration based on `conan` subdirectory
 conan config install ../conan/
 
-# Install Conan dependencies
-conan install ../ --build=missing
+# Install Conan dependencies with C++11 ABI
+conan install ../ --build=missing --setting compiler.libcxx=libstdc++11
 ```
 
-_NOTE: If you encounter later some undefined references errors, modify your `default` Conan profile to use `libstdc++11` ABI_
+_NOTE: Setting of C++11 ABI is especially needed for Google Benchmark, because without this, you will get segfaults at runtime_
 
 Configure CMake:
 
